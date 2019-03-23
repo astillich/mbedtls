@@ -167,7 +167,7 @@ if(ENABLE_PROGRAMS)
     add_subdirectory(programs)
 endif()
 
-ADD_CUSTOM_TARGET(apidoc
+ADD_CUSTOM_TARGET(${IDF_TARGET_PREFIX}apidoc
     COMMAND doxygen mbedtls.doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doxygen)
 
@@ -179,14 +179,14 @@ if(ENABLE_TESTING)
     # additional convenience targets for Unix only
     if(UNIX)
 
-        ADD_CUSTOM_TARGET(covtest
+        ADD_CUSTOM_TARGET(${IDF_TARGET_PREFIX}covtest
             COMMAND make test
             COMMAND programs/test/selftest
             COMMAND tests/compat.sh
             COMMAND tests/ssl-opt.sh
         )
 
-        ADD_CUSTOM_TARGET(lcov
+        ADD_CUSTOM_TARGET(${IDF_TARGET_PREFIX}lcov
             COMMAND rm -rf Coverage
             COMMAND lcov --capture --initial --directory library/CMakeFiles/mbedtls.dir -o files.info
             COMMAND lcov --capture --directory library/CMakeFiles/mbedtls.dir -o tests.info
@@ -197,7 +197,7 @@ if(ENABLE_TESTING)
             COMMAND rm -f files.info tests.info all.info final.info descriptions
         )
 
-        ADD_CUSTOM_TARGET(memcheck
+        ADD_CUSTOM_TARGET(${IDF_TARGET_PREFIX}memcheck
             COMMAND sed -i.bak s+/usr/bin/valgrind+`which valgrind`+ DartConfiguration.tcl
             COMMAND ctest -O memcheck.log -D ExperimentalMemCheck
             COMMAND tail -n1 memcheck.log | grep 'Memory checking results:' > /dev/null
